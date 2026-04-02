@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "npx vite build"
+    "prebuild": "chmod +x ./node_modules/.bin/vite",
+    "build": "vite build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
