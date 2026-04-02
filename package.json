@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite dev --port 3000",
     "prebuild": "chmod +x ./node_modules/.bin/vite",
-    "build": "vite build"
+    "build": "vite build",
+    "start": "node dist/server/server.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
