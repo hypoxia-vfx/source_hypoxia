@@ -4,15 +4,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
-    "prebuild": "chmod +x ./node_modules/.bin/vite",
     "build": "vite build",
-    "start": "env PORT=$PORT HOST=0.0.0.0 node dist/server/server.js"
+    "start": "node server.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-router": "^1.163.3",
     "@tanstack/react-start": "^1.166.1",
     "@tanstack/router-plugin": "^1.164.0",
+    "express": "^5.2.1",
     "highlight.js": "^11.11.1",
     "lucide-react": "^0.576.0",
     "react": "^19.2.0",
