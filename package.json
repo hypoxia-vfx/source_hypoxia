@@ -6,7 +6,7 @@
     "dev": "vite dev --port 3000",
     "prebuild": "chmod +x ./node_modules/.bin/vite",
     "build": "vite build",
-    "start": "node dist/server/server.js"
+    "start": "env PORT=$PORT HOST=0.0.0.0 node dist/server/server.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
