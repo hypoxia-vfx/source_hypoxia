@@ -1,22 +1,22 @@
 export function WorkSection() {
   const projects = [
     {
-      title: 'АРХИТЕКТОРЫ',
-      sub: 'Брендинг & Идентика',
-      year: '2024',
+      title: 'БИЗНЕС РОЛИК',
+      sub: 'Моушн-дизайн & VFX',
+      year: '2025',
       num: '01',
       col: 'md:col-span-2',
-      videoUrl: '', // Пример: '/videos/case1.mp4'
+      videoUrl: '/videos/biz_2.mp4',
     },
-    { title: 'NEXUS', sub: 'Веб-дизайн', year: '2024', num: '02', col: '', videoUrl: '' },
-    { title: 'MERIDIAN', sub: 'Моушн-дизайн', year: '2023', num: '03', col: '', videoUrl: '' },
+    { title: 'ИИ ТУТОРИАЛ', sub: 'Видео туториал', year: '2026', num: '02', col: '', videoUrl: '/videos/gpt_test_2.mp4' },
+    { title: 'РЕКЛАМНЫЙ ПРОЕКТ', sub: 'Видеомонтаж', year: '2026', num: '03', col: '', videoUrl: '/videos/reklama.mp4' },
     {
-      title: 'ФЕНІКС',
-      sub: 'Полная идентика',
-      year: '2023',
+      title: 'ПРИНИМАТЬ РЕШЕНИЯ',
+      sub: 'Динамичный ролик',
+      year: '2025',
       num: '04',
       col: 'md:col-span-2',
-      videoUrl: '',
+      videoUrl: '/videos/rich.mp4',
     },
   ]
 
@@ -38,16 +38,19 @@ export function WorkSection() {
             </h2>
           </div>
           <p className="reveal delay-200 hidden md:block text-gray-500 text-sm max-w-xs leading-relaxed">
-            Избранная подборка моей работы — от идентики до цифровых продуктов
+            Избранная подборка моей работы — от моушена к полноценным видео
           </p>
         </div>
 
         {/* Project grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projects.map((project, i) => (
-            <div
+            <a
               key={i}
-              className={`reveal stagger-${i + 1} ${project.col} group card-dark rounded-2xl overflow-hidden cursor-pointer`}
+              href={project.videoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`reveal stagger-${i + 1} ${project.col} group card-dark rounded-2xl overflow-hidden cursor-pointer block`}
             >
               <div className="relative aspect-[16/9] bg-[#0f0f0f] overflow-hidden">
                 {/* ── VIDEO LAYER ── */}
@@ -72,8 +75,8 @@ export function WorkSection() {
                 {/* ── HOVER OVERLAY ── */}
                 <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <div className="border border-white/50 bg-black/20 backdrop-blur-sm px-8 py-3 font-display font-bold text-sm tracking-widest uppercase text-white">
-                    Смотреть кейс →
+                  <div className="border border-white/50 bg-black/20 backdrop-blur-sm px-8 py-3 font-display font-bold text-sm tracking-widest uppercase text-white hover:bg-white hover:text-black transition-colors duration-300">
+                    Смотреть полностью →
                   </div>
                 </div>
                 {/* Animated lines */}
@@ -93,7 +96,7 @@ export function WorkSection() {
                   {project.year}
                 </span>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>

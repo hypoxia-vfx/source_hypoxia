@@ -15,9 +15,9 @@ export function Hero() {
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-stroke-sm font-display font-black select-none pointer-events-none whitespace-nowrap"
         style={{ fontSize: 'clamp(6rem, 20vw, 18rem)', opacity: 0.06 }}
-        data-parallax="0.15"
+        data-parallax="-0.4"
       >
-        ДИЗАЙН
+        МОУШН
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto w-full">
@@ -25,7 +25,7 @@ export function Hero() {
         <div className="flex items-center gap-4 mb-8 animate-fade-up">
           <div className="w-12 h-px bg-white/40 animate-line-grow" />
           <span className="text-xs tracking-[0.3em] uppercase text-white/40 font-light">
-            Моушн-дизайн & Визуал — 2024
+            Моушн-дизайн & Видеомонтаж — 2026
           </span>
         </div>
 
@@ -34,7 +34,7 @@ export function Hero() {
           <span className="block overflow-hidden">
             <span
               className="block animate-fade-up"
-              style={{ fontSize: 'clamp(3rem, 10vw, 9rem)' }}
+              style={{ fontSize: 'clamp(2.2rem, 7.5vw, 8rem)' }}
             >
               Я СОЗДАЮ
             </span>
@@ -42,17 +42,17 @@ export function Hero() {
           <span className="block overflow-hidden">
             <span
               className="block animate-fade-up delay-100"
-              style={{ fontSize: 'clamp(3rem, 10vw, 9rem)' }}
+              style={{ fontSize: 'clamp(2.2rem, 7.5vw, 8rem)' }}
             >
-              ВИЗУАЛЬНЫЕ
+              НАСТОЯЩИЕ
             </span>
           </span>
           <span className="block overflow-hidden">
             <span
               className="block animate-fade-up delay-200 text-stroke"
-              style={{ fontSize: 'clamp(3rem, 10vw, 9rem)' }}
+              style={{ fontSize: 'clamp(2.2rem, 7.5vw, 8rem)' }}
             >
-              ШЕДЕВРЫ
+              ПРОДАЖИ
             </span>
           </span>
         </h1>
@@ -62,14 +62,13 @@ export function Hero() {
             className="text-gray-400 font-light leading-relaxed max-w-md animate-fade-up delay-400"
             style={{ fontSize: '1.1rem' }}
           >
-            Трансформирую бренды через силу визуального языка. Каждый пиксель —
-            это намерение. Каждая линия — это история.
+            Фокус на ритме, структуре и подаче — чтобы видео не просто выглядело, а работало.
           </p>
           <div className="flex gap-4 animate-fade-up delay-500">
-            <a href="#work" className="hover-invert group border border-white px-10 py-4 font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 relative overflow-hidden">
+            <a href="#work" className="hover-invert glow-button group border border-white px-10 py-4 font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 relative overflow-hidden">
               <span className="relative z-10">Смотреть работы</span>
             </a>
-            <a href="#contact" className="px-10 py-4 font-display font-bold text-sm tracking-widest uppercase text-white/40 hover:text-white transition-colors duration-300">
+            <a href="#contact" className="glow-text px-10 py-4 font-display font-bold text-sm tracking-widest uppercase text-white/40 hover:text-white transition-colors duration-300">
               → Контакт
             </a>
           </div>
@@ -88,9 +87,10 @@ export function Hero() {
       </div>
 
       {/* Decorative circles */}
-      <div className="absolute top-20 right-20 w-64 h-64 rounded-full border border-white/5 animate-rotate-slow hidden md:block" />
+      <div className="absolute top-20 right-20 w-64 h-64 rounded-full border border-white/5 animate-rotate-slow hidden md:block" data-parallax="0.3" />
       <div
         className="absolute top-20 right-20 w-48 h-48 rounded-full border border-white/5 hidden md:block"
+        data-parallax="0.5"
         style={{
           animation: 'rotateSlow 15s linear infinite reverse',
           top: '6rem',
