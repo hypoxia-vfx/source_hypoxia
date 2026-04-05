@@ -1,56 +1,55 @@
-export function WorkSection() {
-  const projects = [
-    {
-      title: 'БИЗНЕС РОЛИК',
-      sub: 'Моушн-дизайн & VFX',
-      year: '2025',
-      num: '01',
-      col: 'md:col-span-2',
-      videoUrl: '/videos/biz_2.mp4',
-    },
-    { title: 'ИИ ТУТОРИАЛ', sub: 'Видео туториал', year: '2026', num: '02', col: '', videoUrl: '/videos/gpt_test_2.mp4' },
-    { title: 'РЕКЛАМНЫЙ ПРОЕКТ', sub: 'Видеомонтаж', year: '2026', num: '03', col: '', videoUrl: '/videos/reklama.mp4' },
-    {
-      title: 'ПРИНИМАТЬ РЕШЕНИЯ',
-      sub: 'Динамичный ролик',
-      year: '2025',
-      num: '04',
-      col: 'md:col-span-2',
-      videoUrl: '/videos/rich.mp4',
-    },
-  ]
+import { motion } from 'framer-motion'
+import { projects, Project } from '@/data/projects'
+
+interface WorkSectionProps {
+  onSelectProject: (project: Project) => void
+}
+
+export function WorkSection({ onSelectProject }: WorkSectionProps) {
 
   return (
     <section id="work" className="px-8 md:px-16 py-24">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-end justify-between mb-16">
-          <div>
-            <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-4">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-xs tracking-[0.3em] uppercase text-white/40 mb-4">
               — Мои работы
             </p>
             <h2
-              className="reveal delay-100 font-display font-black leading-none"
+              className="font-display font-black leading-none"
               style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}
             >
               МОИ
               <br />
               <span className="text-stroke">ПРОЕКТЫ</span>
             </h2>
-          </div>
-          <p className="reveal delay-200 hidden md:block text-gray-500 text-sm max-w-xs leading-relaxed">
+          </motion.div>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="hidden md:block text-gray-500 text-sm max-w-xs leading-relaxed"
+          >
             Избранная подборка моей работы — от моушена к полноценным видео
-          </p>
+          </motion.p>
         </div>
 
         {/* Project grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {projects.map((project, i) => (
-            <a
+            <motion.div
               key={i}
-              href={project.videoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`reveal stagger-${i + 1} ${project.col} group card-dark rounded-2xl overflow-hidden cursor-pointer block`}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              onClick={() => onSelectProject(project)}
+              className={`${project.col} group card-dark rounded-2xl overflow-hidden cursor-pointer block`}
             >
               <div className="relative aspect-[16/9] bg-[#0f0f0f] overflow-hidden">
                 {/* ── VIDEO LAYER ── */}
@@ -76,7 +75,7 @@ export function WorkSection() {
                 <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <div className="border border-white/50 bg-black/20 backdrop-blur-sm px-8 py-3 font-display font-bold text-sm tracking-widest uppercase text-white hover:bg-white hover:text-black transition-colors duration-300">
-                    Смотреть полностью →
+                    Смотреть кейс →
                   </div>
                 </div>
                 {/* Animated lines */}
@@ -85,10 +84,10 @@ export function WorkSection() {
               </div>
               <div className="p-6 flex items-center justify-between">
                 <div>
-                  <h3 className="font-display font-black text-xl tracking-tighter mb-1">
+                  <h3 className="font-display font-black text-xl tracking-tighter mb-1 uppercase tracking-tight">
                     {project.title}
                   </h3>
-                  <p className="text-gray-500 text-sm font-light">
+                  <p className="text-gray-500 text-sm font-light uppercase tracking-widest text-[10px]">
                     {project.sub}
                   </p>
                 </div>
@@ -96,7 +95,7 @@ export function WorkSection() {
                   {project.year}
                 </span>
               </div>
-            </a>
+            </motion.div>
           ))}
         </div>
       </div>

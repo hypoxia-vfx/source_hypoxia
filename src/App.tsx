@@ -1,16 +1,22 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { useParallax } from '@/hooks/useParallax'
 import { useCursor } from '@/hooks/useCursor'
+import { useLenis } from '@/hooks/useLenis'
 import { StatCard } from '@/components/StatCard'
 import { Hero } from '@/components/sections/Hero'
 import { WorkSection } from '@/components/sections/WorkSection'
 import { ServicesSection } from '@/components/sections/ServicesSection'
+import { ProjectDetail } from './components/ProjectDetail'
 
 export default function App() {
+  useLenis()
   useIntersectionObserver()
   useParallax()
   useCursor()
+
+  const [selectedProject, setSelectedProject] = useState<any>(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -20,7 +26,6 @@ export default function App() {
     <div className="noise bg-[#0a0a0a] text-[#f5f5f0] min-h-screen">
       {/* Custom cursor */}
       <div className="cursor-dot hidden md:block" />
-      <div className="cursor-ring hidden md:block" />
 
       {/* ── NAVIGATION ── */}
       <nav
@@ -28,7 +33,7 @@ export default function App() {
         style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, transparent 100%)' }}
       >
         <div className="font-display font-black text-xl tracking-tighter animate-fade-in">
-          HYP<span className="text-stroke">O</span>XIA
+          HYP<span className="text-stroke">O</span>XIA <span className="text-stroke">editing</span>
         </div>
         <ul className="hidden md:flex gap-10 text-sm font-light tracking-widest uppercase animate-fade-in delay-200">
           <li><a href="#work" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Работы</a></li>
@@ -62,12 +67,12 @@ export default function App() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <StatCard value={16} suffix="+" label="Проектов" delay="1" />
           <StatCard value={2} suffix=" года" label="Опыта" delay="2" />
-          <StatCard value={100} suffix="%" label="Отдача" delay="3" />
+          <StatCard value={97} suffix="%" label="Отдача" delay="3" />
           <StatCard value={4} suffix="+" label="Ниши" delay="4" />
         </div>
       </section>
 
-      <WorkSection />
+      <WorkSection onSelectProject={setSelectedProject} />
       <ServicesSection />
 
       {/* ── ABOUT / MANIFESTO ── */}
@@ -97,12 +102,12 @@ export default function App() {
                 Я собираю видео так, чтобы зритель не уходил: через ритм, акценты и правильную подачу. Без лишнего шума и «красоты ради красоты».
               </p>
               <p className="reveal delay-300 text-gray-500 leading-relaxed">
-               Работаю с блогерами и брендами. Результат — выше вовлечённость и более живой контент.
+                Работаю с блогерами и брендами. Результат — выше вовлечённость и более живой контент.
               </p>
             </div>
             <div className="reveal-right delay-200">
               <div className="relative">
-                <div className="aspect-square rounded-2xl overflow-hidden border border-white/10" style={{backgroundImage: 'url(/photo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center'}}>
+                <div className="aspect-square rounded-2xl overflow-hidden border border-white/10" style={{ backgroundImage: 'url(/photo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                   <div className="absolute inset-0 flex items-end p-10">
                     <div>
                       <div className="text-9xl font-display font-black text-stroke mb-4" style={{ lineHeight: 1 }}>H</div>
@@ -223,6 +228,15 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <ProjectDetail
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
