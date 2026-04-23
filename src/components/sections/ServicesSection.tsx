@@ -50,7 +50,7 @@ export function ServicesSection() {
       className="px-8 md:px-16 py-24 border-t border-white/10"
     >
       <div className="max-w-7xl mx-auto">
-        <motion.p 
+        <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -71,7 +71,7 @@ export function ServicesSection() {
           <span className="text-stroke">УСЛУГИ</span>
         </motion.h2>
 
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -104,7 +104,7 @@ export function ServicesSection() {
                 ))}
               </div>
               <span className="text-2xl text-white/20 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
-                →
+
               </span>
             </motion.div>
           ))}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
 import { useParallax } from '@/hooks/useParallax'
 import { useCursor } from '@/hooks/useCursor'
@@ -9,6 +9,7 @@ import { Hero } from '@/components/sections/Hero'
 import { WorkSection } from '@/components/sections/WorkSection'
 import { ServicesSection } from '@/components/sections/ServicesSection'
 import { ProjectDetail } from './components/ProjectDetail'
+import { Target, Zap, RefreshCw, MessageCircle, ArrowRight } from 'lucide-react'
 
 export default function App() {
   useLenis()
@@ -17,10 +18,43 @@ export default function App() {
   useCursor()
 
   const [selectedProject, setSelectedProject] = useState<any>(null)
+  const [showFloatingCta, setShowFloatingCta] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  // Show floating CTA after scrolling past hero
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowFloatingCta(window.scrollY > window.innerHeight * 0.8)
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const advantages = [
+    {
+      icon: Target,
+      title: 'Понимаю алгоритмы',
+      desc: 'Монтирую с учётом retention и формата платформы — YouTube, Reels, TikTok',
+    },
+    {
+      icon: Zap,
+      title: 'Быстро',
+      desc: 'Средний срок 3–5 дней. Экспресс-проекты за 24 часа',
+    },
+    {
+      icon: RefreshCw,
+      title: 'Бесплатные правки',
+      desc: 'До 2 раундов правок включены в каждый проект',
+    },
+    {
+      icon: MessageCircle,
+      title: 'Всегда на связи',
+      desc: 'Отвечаю в Telegram максимально быстро. Без кружков и молчания',
+    },
+  ]
 
   return (
     <div className="noise bg-[#0a0a0a] text-[#f5f5f0] min-h-screen">
@@ -38,7 +72,6 @@ export default function App() {
         <ul className="hidden md:flex gap-10 text-sm font-light tracking-widest uppercase animate-fade-in delay-200">
           <li><a href="#work" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Работы</a></li>
           <li><a href="#services" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Услуги</a></li>
-          <li><a href="#about" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Обо мне</a></li>
           <li><a href="#contact" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Контакт</a></li>
         </ul>
         <a
@@ -75,7 +108,7 @@ export default function App() {
       <WorkSection onSelectProject={setSelectedProject} />
       <ServicesSection />
 
-      {/* ── ABOUT / MANIFESTO ── */}
+      {/* ── ПОЧЕМУ Я (replaces Manifesto) ── */}
       <section id="about" className="px-8 md:px-16 py-32 relative overflow-hidden">
         <div
           className="absolute pointer-events-none opacity-5"
@@ -92,19 +125,27 @@ export default function App() {
 
         <div className="max-w-7xl mx-auto relative">
           <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* Left: Advantages */}
             <div>
-              <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-6">— Манифест</p>
-              <h2 className="reveal delay-100 font-display font-black leading-tight mb-8" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
-                МОНТАЖ - ЭТО НЕ ЭФФЕКТЫ<br />
-                <span className="text-stroke">ЭТО УДЕРЖАНИЕ</span>
+              <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-6">— Почему я</p>
+              <h2 className="reveal delay-100 font-display font-black leading-tight mb-10" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
+                РЕЗУЛЬТАТ<br />
+                <span className="text-stroke">А НЕ ПРОЦЕСС</span>
               </h2>
-              <p className="reveal delay-200 text-gray-400 leading-relaxed mb-6" style={{ fontSize: '1.05rem' }}>
-                Я собираю видео так, чтобы зритель не уходил: через ритм, акценты и правильную подачу. Без лишнего шума и «красоты ради красоты».
-              </p>
-              <p className="reveal delay-300 text-gray-500 leading-relaxed">
-                Работаю с блогерами и брендами. Результат — выше вовлечённость и более живой контент.
-              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {advantages.map((adv, i) => (
+                  <div key={i} className={`reveal stagger-${i + 1} advantage-card`}>
+                    <div className="advantage-icon">
+                      <adv.icon size={20} strokeWidth={1.5} />
+                    </div>
+                    <h3 className="font-display font-bold text-sm mb-2 uppercase tracking-wide">{adv.title}</h3>
+                    <p className="text-gray-500 text-sm font-light leading-relaxed">{adv.desc}</p>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Right: Photo */}
             <div className="reveal-right delay-200">
               <div className="relative">
                 <div className="aspect-square rounded-2xl overflow-hidden border border-white/10" style={{ backgroundImage: 'url(/photo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -138,21 +179,28 @@ export default function App() {
                 quote: 'Видео набрало просмотров, о которых раньше я даже мечтать не мог. Динамика сумасшедшая!',
                 author: 'demonenok work',
                 role: 'Ютубер',
+                result: '500K+ просмотров',
               },
               {
                 quote: 'Сделал 10 рилсов на 3 дня раньше срока, по очень хорошему прайсу!',
                 author: 'Tim',
                 role: 'Продюсер',
+                result: '10 рилсов за 4 дня',
               },
               {
                 quote: 'Работал с ним с самого старта канала, когда он был новичком. Даже тогда видео были качеством не хуже чем у многих',
                 author: 'SynapseXseller',
                 role: 'Ютуб блоггер',
+                result: 'Партнёр с 2024',
               },
             ].map((t, i) => (
-              <div key={i} className={`reveal stagger-${i + 1} card-dark rounded-2xl p-8 hover-lift`}>
+              <div key={i} className={`reveal stagger-${i + 1} card-dark rounded-2xl p-8 hover-lift flex flex-col`}>
+                {/* Result badge */}
+                <div className="result-badge mb-5">
+                  <span className="inline-block text-xs font-bold tracking-wider uppercase">{t.result}</span>
+                </div>
                 <div className="text-4xl font-display font-black text-white/10 mb-4">"</div>
-                <p className="text-gray-300 leading-relaxed mb-6 font-light">{t.quote}</p>
+                <p className="text-gray-300 leading-relaxed mb-6 font-light flex-1">{t.quote}</p>
                 <div className="border-t border-white/10 pt-4">
                   <div className="font-medium text-white text-sm">{t.author}</div>
                   <div className="text-gray-500 text-xs mt-1 font-light">{t.role}</div>
@@ -173,29 +221,38 @@ export default function App() {
 
         <div className="max-w-4xl mx-auto text-center relative">
           <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-6">— Начнём?</p>
-          <h2 className="reveal delay-100 font-display font-black leading-none mb-8" style={{ fontSize: 'clamp(3rem, 9vw, 7rem)' }}>
-            ГОТОВЫ<br />РАБОТАТЬ
+          
+          {/* Urgency badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-block mb-8"
+          >
+            <div className="urgency-badge">
+              <span className="urgency-dot" />
+              Свободных слотов: 2
+            </div>
+          </motion.div>
+
+          <h2 className="reveal delay-100 font-display font-black leading-none mb-4" style={{ fontSize: 'clamp(3rem, 9vw, 7rem)' }}>
+            ГОТОВЫ
           </h2>
           <h2 className="reveal delay-200 font-display font-black leading-none mb-10 text-stroke" style={{ fontSize: 'clamp(3rem, 9vw, 7rem)' }}>
-            ВМЕСТЕ?
+            НАЧАТЬ?
           </h2>
           <p className="reveal delay-300 text-gray-400 mb-12 font-light leading-relaxed max-w-md mx-auto">
-            Расскажите о вашем проекте. Мы ответим в течение 24 часов и предложим первичную концепцию бесплатно.
+            Беру 3–4 проекта в месяц, чтобы каждому уделить максимум внимания. Расскажите о вашем — мы ответим в ближайшее время.
           </p>
-          <div className="reveal delay-400 flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="reveal delay-400">
             <a
               href="https://t.me/hypoxia_editing"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover-invert glow-button border border-white px-12 py-5 font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 animate-pulse-border"
+              className="hover-invert glow-button border border-white px-16 py-6 font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 animate-pulse-border inline-flex items-center gap-3"
             >
-              Написать в Telegram
-            </a>
-            <a
-              href="mailto:hello@hypoxia.studio"
-              className="glow-text px-12 py-5 font-display font-bold text-sm tracking-widest uppercase text-white/40 hover:text-white border border-transparent hover:border-white/20 transition-all duration-300"
-            >
-              hello@hypoxia.studio
+              Написать сейчас
+              <ArrowRight size={18} />
             </a>
           </div>
         </div>
@@ -228,6 +285,30 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* ── FLOATING CTA (Mobile) ── */}
+      <AnimatePresence>
+        {showFloatingCta && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="fixed bottom-6 left-4 right-4 z-[90] md:hidden"
+          >
+            <a
+              href="https://t.me/hypoxia_editing"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="floating-cta"
+            >
+              <MessageCircle size={18} />
+              <span>Написать в Telegram</span>
+              <ArrowRight size={16} />
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {selectedProject && (

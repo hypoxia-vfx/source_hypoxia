@@ -13,7 +13,7 @@ export function Hero() {
   // Subtler parallax ranges (reduced by ~50%)
   const textX = useTransform(x, [-500, 500], [15, -15])
   const textY = useTransform(y, [-500, 500], [15, -15])
-  
+
   const circleX = useTransform(x, [-500, 500], [30, -30])
   const circleY = useTransform(y, [-500, 500], [30, -30])
 
@@ -42,7 +42,7 @@ export function Hero() {
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 15 }, // Subtler entrance (reduced from 30)
+    hidden: { opacity: 0, y: 15 },
     visible: {
       opacity: 1,
       y: 0,
@@ -56,7 +56,7 @@ export function Hero() {
   return (
     <section className="relative min-h-screen flex flex-col justify-center px-8 md:px-16 pt-32 pb-20 overflow-hidden bg-transparent">
       {/* ── BACKGROUND LAYERS ── */}
-      
+
       {/* 1. Large "МОУШН" Text */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center items-center pointer-events-none select-none z-0 overflow-hidden">
         <motion.div
@@ -67,21 +67,19 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* 2. Decorative Circles (Separated parallax from rotation to prevent conflicts) */}
+      {/* 2. Decorative Circles */}
       <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        {/* Top Right Circle */}
-        <motion.div 
+        <motion.div
           style={{ x: circleX, y: circleY }}
           className="absolute top-[15%] right-[10%] w-96 h-96 hidden md:block"
         >
           <div className="w-full h-full rounded-full border border-white/20 animate-rotate-slow" />
         </motion.div>
 
-        {/* Bottom Left Circle */}
-        <motion.div 
-          style={{ 
-            x: useTransform(x, [-500, 500], [-20, 20]), 
-            y: useTransform(y, [-500, 500], [-20, 20]) 
+        <motion.div
+          style={{
+            x: useTransform(x, [-500, 500], [-20, 20]),
+            y: useTransform(y, [-500, 500], [-20, 20])
           }}
           className="absolute bottom-[15%] left-[5%] w-64 h-64 hidden md:block"
         >
@@ -100,19 +98,19 @@ export function Hero() {
       />
 
       {/* 4. Main Content */}
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="relative z-10 max-w-7xl mx-auto w-full"
       >
-        {/* Eyebrow */}
-        <motion.div variants={itemVariants} className="flex items-center gap-4 mb-6">
-          <motion.div 
+        {/* Eyebrow + Speed Badge */}
+        <motion.div variants={itemVariants} className="flex items-center gap-4 mb-6 flex-wrap">
+          <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 1, ease: "circOut", delay: 0.5 }}
-            className="w-12 h-px bg-white/40 origin-left" 
+            className="w-12 h-px bg-white/40 origin-left"
           />
           <span className="text-xs tracking-[0.3em] uppercase text-white/40 font-light">
             Моушн-дизайн & Видеомонтаж — 2026
@@ -156,21 +154,21 @@ export function Hero() {
             className="text-gray-400 font-light leading-relaxed max-w-md"
             style={{ fontSize: '1.15rem' }}
           >
-            Фокус на ритме, структуре и подаче — чтобы видео не просто выглядело, а работало.
+            Монтирую видео, которые удерживают зрителя до конца и приносят просмотры. Для блогеров и брендов, которым важен результат.
           </motion.p>
-          <motion.div variants={itemVariants} className="flex gap-4">
-            <a href="#work" className="hover-invert glow-button group border border-white px-10 py-4 font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 relative overflow-hidden">
-              <span className="relative z-10">Смотреть работы</span>
+          <motion.div variants={itemVariants} className="flex gap-4 flex-wrap">
+            <a href="#contact" className="hover-invert glow-button group border border-white px-10 py-4 font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 relative overflow-hidden">
+              <span className="relative z-10">Обсудить проект</span>
             </a>
-            <a href="#contact" className="glow-text px-10 py-4 font-display font-bold text-sm tracking-widest uppercase text-white/40 hover:text-white transition-colors duration-300">
-              → Контакт
+            <a href="#work" className="glow-text px-10 py-4 font-display font-bold text-sm tracking-widest uppercase text-white/40 hover:text-white transition-colors duration-300">
+              Смотреть работы →
             </a>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* 5. Scroll indicator (Topmost) */}
-      <motion.div 
+      {/* 5. Scroll indicator */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2, duration: 1 }}
