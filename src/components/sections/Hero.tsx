@@ -118,14 +118,14 @@ export function Hero() {
         </motion.div>
 
         {/* Main heading */}
-        <h1 className="font-display font-black leading-[0.9] mb-8 max-w-5xl">
+        <h1 className="font-display font-black leading-[1] mb-8 max-w-5xl">
           <span className="block overflow-hidden">
             <motion.span
               variants={itemVariants}
               className="block"
-              style={{ fontSize: 'clamp(2.5rem, 8vw, 9rem)' }}
+              style={{ fontSize: 'clamp(5rem, 8vw, 9rem)' }}
             >
-              <span className="text-stroke">Я</span> СОЗДАЮ
+              ВИДЕО <span className="text-stroke">КОТОРЫЕ</span>
             </motion.span>
           </span>
           <span className="block overflow-hidden">
@@ -134,16 +134,7 @@ export function Hero() {
               className="block"
               style={{ fontSize: 'clamp(2.5rem, 8vw, 9rem)' }}
             >
-              НЕ <span className="text-stroke">ВИДЕО</span>
-            </motion.span>
-          </span>
-          <span className="block overflow-hidden">
-            <motion.span
-              variants={itemVariants}
-              className="block"
-              style={{ fontSize: 'clamp(2.5rem, 8vw, 9rem)' }}
-            >
-              <span className="text-stroke">А</span> ИСТОРИИ
+              СМОТРЯТ
             </motion.span>
           </span>
         </h1>

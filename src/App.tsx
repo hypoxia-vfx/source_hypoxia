@@ -169,7 +169,7 @@ export default function App() {
       {/* ── TESTIMONIALS ── */}
       <section className="px-8 md:px-16 py-24 border-t border-white/10">
         <div className="max-w-7xl mx-auto">
-          <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-4">— Отзывы <em>(все настоящие :) )</em></p>
+          <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-4">— Отзывы</p>
           <h2 className="reveal delay-100 font-display font-black mb-16" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
             ГОВОРЯТ<br /><span className="text-stroke">КЛИЕНТЫ</span>
           </h2>
@@ -221,7 +221,7 @@ export default function App() {
 
         <div className="max-w-4xl mx-auto text-center relative">
           <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-6">— Начнём?</p>
-          
+
           {/* Urgency badge */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -231,7 +231,7 @@ export default function App() {
           >
             <div className="urgency-badge">
               <span className="urgency-dot" />
-              Свободных слотов: 2
+              Свободных слотов: 3
             </div>
           </motion.div>
 
@@ -242,7 +242,7 @@ export default function App() {
             НАЧАТЬ?
           </h2>
           <p className="reveal delay-300 text-gray-400 mb-12 font-light leading-relaxed max-w-md mx-auto">
-            Беру 3–4 проекта в месяц, чтобы каждому уделить максимум внимания. Расскажите о вашем — мы ответим в ближайшее время.
+            Беру 3–4 проекта в месяц, чтобы каждому уделить максимум внимания. Расскажите о вашем — я отвечу в ближайшее время.
           </p>
           <div className="reveal delay-400">
             <a
