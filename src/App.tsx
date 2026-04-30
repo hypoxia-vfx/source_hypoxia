@@ -67,7 +67,7 @@ export default function App() {
         style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, transparent 100%)' }}
       >
         <div className="font-display font-black text-xl tracking-tighter animate-fade-in">
-          HYP<span className="text-stroke">O</span>XIA <span className="text-stroke">editing</span>
+          HYPOXIA <span className="text-stroke">editing</span>
         </div>
         <ul className="hidden md:flex gap-10 text-sm font-light tracking-widest uppercase animate-fade-in delay-200">
           <li><a href="#work" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Работы</a></li>
@@ -231,7 +231,7 @@ export default function App() {
           >
             <div className="urgency-badge">
               <span className="urgency-dot" />
-              Свободных слотов: 3
+              Проектов доступно: 3
             </div>
           </motion.div>
 
@@ -242,7 +242,7 @@ export default function App() {
             НАЧАТЬ?
           </h2>
           <p className="reveal delay-300 text-gray-400 mb-12 font-light leading-relaxed max-w-md mx-auto">
-            Беру 3–4 проекта в месяц, чтобы каждому уделить максимум внимания. Расскажите о вашем — я отвечу в ближайшее время.
+            Беру ограниченное числов проектов в месяц, чтобы каждому уделить максимум внимания. Расскажите и о вашем — я отвечу в ближайшее время.
           </p>
           <div className="reveal delay-400">
             <a
@@ -264,9 +264,9 @@ export default function App() {
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div>
               <div className="font-display font-black text-2xl tracking-tighter mb-2">
-                HYP<span className="text-stroke">O</span>XIA
+                HYPOXIA
               </div>
-              <p className="text-gray-600 text-xs font-light">Специалист по видеомонтажу и моушн-дизайну</p>
+              <p className="text-gray-600 text-xs font-light">Специалист по монтажу и моушн-дизайну</p>
             </div>
             <div className="flex gap-8 text-xs tracking-widest uppercase font-light text-gray-600">
               <a href="#work" className="hover:text-white transition-colors duration-300">Работы</a>
@@ -280,7 +280,7 @@ export default function App() {
           </div>
           <div className="section-line my-8" />
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-700 font-light">
-            <span>© 2024 Hypoxia. Все права защищены.</span>
+            <span>© 2026 Hypoxia. Все права защищены.</span>
             <span>Сделано бессоными ночами напролет</span>
           </div>
         </div>
