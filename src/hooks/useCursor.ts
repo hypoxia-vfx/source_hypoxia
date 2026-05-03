@@ -18,7 +18,7 @@ export function useCursor() {
     }
 
     const handleHover = (e: MouseEvent) => {
-      // Ничего не делаем - курсор не меняется при наведении
+      
     }
 
     const animate = () => {
