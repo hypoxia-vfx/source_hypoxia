@@ -123,7 +123,7 @@ export function Hero() {
             <motion.span
               variants={itemVariants}
               className="block"
-              style={{ fontSize: 'clamp(5rem, 8vw, 9rem)' }}
+              style={{ fontSize: 'clamp(2.2rem, 8vw, 9rem)' }}
             >
               ВИДЕО <span className="text-stroke">КОТОРЫЕ</span>
             </motion.span>
@@ -132,7 +132,7 @@ export function Hero() {
             <motion.span
               variants={itemVariants}
               className="block"
-              style={{ fontSize: 'clamp(2.5rem, 8vw, 9rem)' }}
+              style={{ fontSize: 'clamp(2.2rem, 8vw, 9rem)' }}
             >
               СМОТРЯТ
             </motion.span>

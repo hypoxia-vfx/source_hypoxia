@@ -56,7 +56,7 @@ export function WorkSection({ onSelectProject }: WorkSectionProps) {
                 {project.videoUrl && (
                   <video
                     src={project.videoUrl}
-                    className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-700 scale-110 group-hover:scale-100 transition-transform duration-1000"
+                    className="absolute inset-0 w-full h-full object-cover opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-700 md:scale-110 md:group-hover:scale-100 transition-transform duration-1000"
                     autoPlay
                     loop
                     muted
