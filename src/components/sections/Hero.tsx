@@ -1,177 +1,108 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { useEffect } from 'react'
+import { motion } from 'framer-motion'
 
 export function Hero() {
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-
-  // Subtler spring for smoother, less "jumpy" movement
-  const springConfig = { damping: 30, stiffness: 120 }
-  const x = useSpring(mouseX, springConfig)
-  const y = useSpring(mouseY, springConfig)
-
-  // Subtler parallax ranges (reduced by ~50%)
-  const textX = useTransform(x, [-500, 500], [15, -15])
-  const textY = useTransform(y, [-500, 500], [15, -15])
-
-  const circleX = useTransform(x, [-500, 500], [30, -30])
-  const circleY = useTransform(y, [-500, 500], [30, -30])
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const { clientX, clientY } = e
-      const moveX = clientX - window.innerWidth / 2
-      const moveY = clientY - window.innerHeight / 2
-      mouseX.set(moveX)
-      mouseY.set(moveY)
-    }
-
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [mouseX, mouseY])
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
+        staggerChildren: 0.2,
+        delayChildren: 0.3,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
+    hidden: { opacity: 0, y: 40 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1] as any,
+        duration: 1.5,
+        ease: [0.25, 1, 0.5, 1],
       },
     },
   }
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-8 md:px-16 pt-32 pb-20 overflow-hidden bg-transparent">
-      {/* ── BACKGROUND LAYERS ── */}
-
-      {/* 1. Large "МОУШН" Text */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex justify-center items-center pointer-events-none select-none z-0 overflow-hidden">
-        <motion.div
-          style={{ x: textX, y: textY, fontSize: 'clamp(6rem, 20vw, 18rem)', opacity: 0.15 }}
-          className="text-stroke-sm font-display font-black whitespace-nowrap"
-        >
-          МОУШЕН
-        </motion.div>
-      </div>
-
-      {/* 2. Decorative Circles */}
-      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-        <motion.div
-          style={{ x: circleX, y: circleY }}
-          className="absolute top-[15%] right-[10%] w-96 h-96 hidden md:block"
-        >
-          <div className="w-full h-full rounded-full border border-white/20 animate-rotate-slow" />
-        </motion.div>
-
-        <motion.div
-          style={{
-            x: useTransform(x, [-500, 500], [-20, 20]),
-            y: useTransform(y, [-500, 500], [-20, 20])
-          }}
-          className="absolute bottom-[15%] left-[5%] w-64 h-64 hidden md:block"
-        >
-          <div className="w-full h-full rounded-full border border-white/10 animate-rotate-slow delay-500" />
-        </motion.div>
-      </div>
-
-      {/* 3. Background Grid Overlay */}
-      <div
-        className="absolute inset-0 opacity-[0.03] pointer-events-none z-0"
-        style={{
-          backgroundImage:
-            'linear-gradient(#f5f5f0 1px, transparent 1px), linear-gradient(90deg, #f5f5f0 1px, transparent 1px)',
-          backgroundSize: '80px 80px',
-        }}
-      />
-
-      {/* 4. Main Content */}
-      <motion.div
+    <section className="relative min-h-screen flex flex-col justify-center items-center px-6 md:px-16 pt-32 pb-24 overflow-hidden">
+      {/* ── MAIN CONTENT ── */}
+      <motion.div 
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="relative z-10 max-w-7xl mx-auto w-full"
+        className="relative z-10 max-w-[1400px] mx-auto w-full flex flex-col items-center text-center"
       >
-        {/* Eyebrow + Speed Badge */}
-        <motion.div variants={itemVariants} className="flex items-center gap-4 mb-6 flex-wrap">
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1, ease: "circOut", delay: 0.5 }}
-            className="w-12 h-px bg-white/40 origin-left"
-          />
-          <span className="text-xs tracking-[0.3em] uppercase text-white/40 font-light">
-            Моушн-дизайн & Видеомонтаж — 2026
-          </span>
-        </motion.div>
-
-        {/* Main heading */}
-        <h1 className="font-display font-black leading-[1] mb-8 max-w-5xl">
-          <span className="block overflow-hidden">
+        {/* Eyebrow - omitted per Anti-Slop / Eyebrow Restraint rules, keeping it ultra clean */}
+        
+        {/* Main heading - Huge typography, centered, lots of air */}
+        <h1 className="font-display font-medium leading-[1] tracking-tight mb-12 select-none w-full text-[var(--color-ink)]">
+          <span className="block overflow-hidden py-2">
             <motion.span
               variants={itemVariants}
-              className="block"
-              style={{ fontSize: 'clamp(2.2rem, 8vw, 9rem)' }}
+              className="block text-[clamp(3.5rem,12vw,10rem)] uppercase"
             >
-              ВИДЕО <span className="text-stroke">КОТОРЫЕ</span>
+              Я создаю
             </motion.span>
           </span>
-          <span className="block overflow-hidden">
+          <span className="block overflow-hidden py-2">
             <motion.span
               variants={itemVariants}
-              className="block"
-              style={{ fontSize: 'clamp(2.2rem, 8vw, 9rem)' }}
+              className="block text-[clamp(3.5rem,12vw,10rem)] italic text-[var(--color-mid)]"
             >
-              СМОТРЯТ
+              не видео,
+            </motion.span>
+          </span>
+          <span className="block overflow-hidden py-2">
+            <motion.span
+              variants={itemVariants}
+              className="block text-[clamp(3.5rem,12vw,10rem)] uppercase"
+            >
+              а истории
             </motion.span>
           </span>
         </h1>
 
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+        {/* Description & CTAs - Centered layout */}
+        <div className="flex flex-col items-center gap-10 max-w-2xl mt-4">
           <motion.p
             variants={itemVariants}
-            className="text-gray-400 font-light leading-relaxed max-w-md"
-            style={{ fontSize: '1.15rem' }}
+            className="text-[var(--color-mid)] font-light leading-relaxed text-lg md:text-2xl"
           >
-            Монтирую видео, которые удерживают зрителя до конца и приносят просмотры. Для блогеров и брендов, которым важен результат.
+            Фокус на ритме, структуре и удержании внимания. Создаю видеоконтент, который досматривают до конца.
           </motion.p>
-          <motion.div variants={itemVariants} className="flex gap-4 flex-wrap">
-            <a href="#contact" className="hover-invert glow-button group border border-white px-10 py-4 font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 relative overflow-hidden">
-              <span className="relative z-10">Обсудить проект</span>
+          
+          <motion.div variants={itemVariants} className="flex flex-wrap gap-6 justify-center items-center mt-4">
+            <a 
+              href="#work" 
+              className="hover-invert border border-[var(--color-ink)] px-10 py-4 font-sans font-medium text-xs tracking-[0.15em] uppercase transition-all duration-300 rounded-full bg-transparent text-[var(--color-ink)]"
+            >
+              Смотреть работы
             </a>
-            <a href="#work" className="glow-text px-10 py-4 font-display font-bold text-sm tracking-widest uppercase text-white/40 hover:text-white transition-colors duration-300">
-              Смотреть работы →
+            <a 
+              href="#contact" 
+              className="px-10 py-4 font-sans font-medium text-xs tracking-[0.15em] uppercase text-[var(--color-ink)] hover:text-[var(--color-accent)] transition-colors duration-300 border border-transparent hover:border-[var(--color-border)] rounded-full"
+            >
+              Связаться
             </a>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* 5. Scroll indicator */}
-      <motion.div
+      {/* ── SCROLL INDICATOR ── */}
+      <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20"
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 z-20"
       >
-        <span className="text-xs tracking-[0.3em] uppercase text-white/30">
+        <span className="text-[10px] tracking-[0.2em] uppercase text-[var(--color-mid)] font-sans font-medium">
           Скролл
         </span>
         <motion.div
-          animate={{ y: [0, 10, 0] }}
+          animate={{ scaleY: [0, 1, 0], transformOrigin: ["top", "top", "bottom"] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-px h-16 bg-gradient-to-b from-white/30 to-transparent"
+          className="w-px h-12 bg-[var(--color-border)]"
         />
       </motion.div>
     </section>

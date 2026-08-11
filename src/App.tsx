@@ -1,315 +1,309 @@
-import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
-import { useParallax } from '@/hooks/useParallax'
-import { useCursor } from '@/hooks/useCursor'
+import { useEffect, useState, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useLenis } from '@/hooks/useLenis'
-import { StatCard } from '@/components/StatCard'
-import { Hero } from '@/components/sections/Hero'
-import { WorkSection } from '@/components/sections/WorkSection'
-import { ServicesSection } from '@/components/sections/ServicesSection'
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
+import { projects } from '@/data/projects'
 import { ProjectDetail } from './components/ProjectDetail'
-import { Target, Zap, RefreshCw, MessageCircle, ArrowRight } from 'lucide-react'
+import { InteractiveHero } from '@/components/InteractiveHero'
+import { CraftLines } from '@/components/CraftLines'
+import { ProjectCard } from '@/components/ProjectCard'
 
 export default function App() {
   useLenis()
   useIntersectionObserver()
-  useParallax()
-  useCursor()
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [selectedProject, setSelectedProject] = useState<any>(null)
-  const [showFloatingCta, setShowFloatingCta] = useState(false)
+  
+  // Interactive Showcase State
+  const categories = Array.from(new Set(projects.map(p => p.category)))
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
+
+  const filteredProjects = useMemo(() => {
+    if (!activeCategory) return []
+    return projects.filter(p => p.category === activeCategory)
+  }, [activeCategory])
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
-  // Show floating CTA after scrolling past hero
   useEffect(() => {
-    const handleScroll = () => {
-      setShowFloatingCta(window.scrollY > window.innerHeight * 0.8)
+    if (isMenuOpen || selectedProject) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const advantages = [
-    {
-      icon: Target,
-      title: 'Понимаю алгоритмы',
-      desc: 'Монтирую с учётом retention и формата платформы — YouTube, Reels, TikTok',
-    },
-    {
-      icon: Zap,
-      title: 'Быстро',
-      desc: 'Средний срок 3–5 дней. Экспресс-проекты за 24 часа',
-    },
-    {
-      icon: RefreshCw,
-      title: 'Бесплатные правки',
-      desc: 'До 2 раундов правок включены в каждый проект',
-    },
-    {
-      icon: MessageCircle,
-      title: 'Всегда на связи',
-      desc: 'Отвечаю в Telegram максимально быстро. Без кружков и молчания',
-    },
-  ]
+  }, [isMenuOpen, selectedProject])
 
   return (
-    <div className="noise bg-[#0a0a0a] text-[#f5f5f0] min-h-screen">
-      {/* Custom cursor */}
-      <div className="cursor-dot hidden md:block" />
-
-      {/* ── NAVIGATION ── */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 md:px-16 py-6"
-        style={{ background: 'linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, transparent 100%)' }}
-      >
-        <div className="font-display font-black text-xl tracking-tighter animate-fade-in">
-          HYPOXIA <span className="text-stroke">editing</span>
+    <div className="bg-[var(--color-bg)] text-[var(--color-text)] min-h-screen selection:bg-[var(--color-accent)] selection:text-[var(--color-bg)]">
+      {/* ── HEADER ── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-16 py-8 mix-blend-difference text-white pointer-events-none">
+        <div className="font-display font-black text-xl tracking-tighter uppercase select-none pointer-events-auto">
+          HYP<span className="text-stroke text-stroke-sm">O</span>XIA
         </div>
-        <ul className="hidden md:flex gap-10 text-sm font-light tracking-widest uppercase animate-fade-in delay-200">
-          <li><a href="#work" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Работы</a></li>
-          <li><a href="#services" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Услуги</a></li>
-          <li><a href="#contact" className="opacity-60 hover:opacity-100 transition-opacity duration-300">Контакт</a></li>
-        </ul>
-        <a
-          href="#contact"
-          className="hover-invert glow-button border border-white/30 px-6 py-2.5 text-xs tracking-widest uppercase font-medium animate-fade-in delay-400 transition-all duration-300"
+        
+        <button
+          onClick={() => setIsMenuOpen(true)}
+          className="group flex items-center gap-4 text-xs tracking-[0.2em] uppercase font-sans font-medium hover:opacity-70 transition-opacity pointer-events-auto"
         >
-          Начать проект
-        </a>
+          <span>Меню</span>
+          <div className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center">
+            <div className="w-4 h-[2px] bg-white relative">
+              <div className="absolute top-[-4px] left-0 w-4 h-[2px] bg-white transition-transform group-hover:translate-y-[2px]" />
+              <div className="absolute bottom-[-4px] left-0 w-4 h-[2px] bg-white transition-transform group-hover:-translate-y-[2px]" />
+            </div>
+          </div>
+        </button>
       </nav>
 
-      <Hero />
+      {/* ── FULLSCREEN MENU ── */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
+            animate={{ opacity: 1, clipPath: 'inset(0 0 0 0)' }}
+            exit={{ opacity: 0, clipPath: 'inset(100% 0 0 0)' }}
+            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[100] bg-[var(--color-surface)] flex flex-col justify-between px-6 md:px-16 py-8"
+            data-lenis-prevent
+          >
+            <div className="flex items-center justify-between">
+              <div className="font-display font-black text-xl tracking-tighter uppercase text-[var(--color-text)]">
+                HYP<span className="text-stroke text-stroke-sm">O</span>XIA
+              </div>
+              <button
+                onClick={() => setIsMenuOpen(false)}
+                className="group flex items-center gap-4 text-xs tracking-[0.2em] uppercase font-sans font-medium text-[var(--color-mid)] hover:text-[var(--color-text)] transition-colors"
+              >
+                <span>Закрыть</span>
+                <div className="w-10 h-10 rounded-full border border-[var(--color-border)] flex items-center justify-center group-hover:rotate-90 group-hover:border-[var(--color-text)] transition-all duration-500">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </div>
+              </button>
+            </div>
 
-      {/* ── MARQUEE ── */}
-      <section className="border-y border-white/10 py-5 overflow-hidden">
-        <div className="flex animate-marquee whitespace-nowrap">
-          {Array(8).fill(['ВИДЕОМОНТАЖ', '✦', 'МОУШН-ДИЗАЙН', '✦', 'VFX', '✦', 'ЦВЕТОКОРРЕКЦИЯ', '✦', 'САУНД-ДИЗАЙН', '✦', 'АНИМАЦИЯ', '✦', 'REELS', '✦']).flat().map((item, i) => (
-            <span key={i} className={`font-display font-black text-sm tracking-[0.2em] mr-8 ${item === '✦' ? 'text-white/30' : 'text-white/70'}`}>
-              {item}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* ── STATS ── */}
-      <section className="px-8 md:px-16 py-24 max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard value={16} suffix="+" label="Проектов" delay="1" />
-          <StatCard value={2} suffix=" года" label="Опыта" delay="2" />
-          <StatCard value={97} suffix="%" label="Отдача" delay="3" />
-          <StatCard value={4} suffix="+" label="Ниши" delay="4" />
-        </div>
-      </section>
-
-      <WorkSection onSelectProject={setSelectedProject} />
-      <ServicesSection />
-
-      {/* ── ПОЧЕМУ Я (replaces Manifesto) ── */}
-      <section id="about" className="px-8 md:px-16 py-32 relative overflow-hidden">
-        <div
-          className="absolute pointer-events-none opacity-5"
-          data-parallax="0.05"
-          style={{
-            top: '-10%',
-            left: '-10%',
-            width: '120%',
-            height: '120%',
-            backgroundImage: 'radial-gradient(circle at 45% 50%, #f5f5f0 0%, transparent 20%)',
-            willChange: 'transform',
-          }}
-        />
-
-        <div className="max-w-7xl mx-auto relative">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Left: Advantages */}
-            <div>
-              <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-6">— Почему я</p>
-              <h2 className="reveal delay-100 font-display font-black leading-tight mb-10" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)' }}>
-                РЕЗУЛЬТАТ<br />
-                <span className="text-stroke">А НЕ ПРОЦЕСС</span>
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {advantages.map((adv, i) => (
-                  <div key={i} className={`reveal stagger-${i + 1} advantage-card`}>
-                    <div className="advantage-icon">
-                      <adv.icon size={20} strokeWidth={1.5} />
-                    </div>
-                    <h3 className="font-display font-bold text-sm mb-2 uppercase tracking-wide">{adv.title}</h3>
-                    <p className="text-gray-500 text-sm font-light leading-relaxed">{adv.desc}</p>
-                  </div>
+            <div className="flex flex-col gap-8 md:gap-12 max-w-[1400px] mx-auto w-full py-20">
+              <p className="text-xs tracking-[0.2em] uppercase text-[var(--color-mid)] font-sans font-medium">— Навигация</p>
+              <div className="flex flex-col gap-4 md:gap-8">
+                {['Манифест', 'Шоукейс', 'Контакты'].map((item, i) => (
+                  <motion.a
+                    key={item}
+                    href={`#${['manifesto', 'showcase', 'contact'][i]}`}
+                    onClick={() => setIsMenuOpen(false)}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 + i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    className="font-display font-medium text-[clamp(3rem,8vw,6rem)] uppercase text-[var(--color-text)] hover:text-[var(--color-accent)] transition-colors leading-none"
+                  >
+                    {item}
+                  </motion.a>
                 ))}
               </div>
             </div>
-
-            {/* Right: Photo */}
-            <div className="reveal-right delay-200">
-              <div className="relative">
-                <div className="aspect-square rounded-2xl overflow-hidden border border-white/10" style={{ backgroundImage: 'url(/photo.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                  <div className="absolute inset-0 flex items-end p-10">
-                    <div>
-                      <div className="text-9xl font-display font-black text-stroke mb-4" style={{ lineHeight: 1 }}>H</div>
-                      <div className="text-xs tracking-[0.4em] uppercase text-white/30">HYPOXIA PERSONAL — С 2024</div>
-                    </div>
-                  </div>
-                  <div className="absolute top-10 right-10 w-20 h-20 border border-white/20 rounded-full animate-rotate-slow" />
-                  <div className="absolute top-16 right-16 w-8 h-8 bg-white/5 rounded-full" />
-                </div>
-                <div className="absolute -bottom-4 -right-4 w-32 h-32 border border-white/10 rounded-xl" data-parallax="-0.08" />
-                <div className="absolute -top-4 -left-4 w-20 h-20 border border-white/10 rounded-xl" data-parallax="-0.05" />
+            
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center text-xs font-sans tracking-[0.1em] uppercase text-[var(--color-mid)] border-t border-[var(--color-border)] pt-8">
+              <span>Специалист по монтажу и моушн-дизайну</span>
+              <div className="flex gap-8 mt-4 md:mt-0">
+                <a href="https://t.me/hypoxia_editing" target="_blank" rel="noopener noreferrer" className="hover:text-[var(--color-text)] transition-colors">Telegram</a>
+                <a href="mailto:hello@hypoxia.studio" className="hover:text-[var(--color-text)] transition-colors">hello@hypoxia.studio</a>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ── */}
-      <section className="px-8 md:px-16 py-24 border-t border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-4">— Отзывы</p>
-          <h2 className="reveal delay-100 font-display font-black mb-16" style={{ fontSize: 'clamp(2rem, 5vw, 4rem)' }}>
-            ГОВОРЯТ<br /><span className="text-stroke">КЛИЕНТЫ</span>
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                quote: 'Видео набрало просмотров, о которых раньше я даже мечтать не мог. Динамика сумасшедшая!',
-                author: 'demonenok work',
-                role: 'Ютубер',
-                result: '500K+ просмотров',
-              },
-              {
-                quote: 'Сделал 10 рилсов на 3 дня раньше срока, по очень хорошему прайсу!',
-                author: 'Tim',
-                role: 'Продюсер',
-                result: '10 рилсов за 4 дня',
-              },
-              {
-                quote: 'Работал с ним с самого старта канала, когда он был новичком. Даже тогда видео были качеством не хуже чем у многих',
-                author: 'SynapseXseller',
-                role: 'Ютуб блоггер',
-                result: 'Партнёр с 2024',
-              },
-            ].map((t, i) => (
-              <div key={i} className={`reveal stagger-${i + 1} card-dark rounded-2xl p-8 hover-lift flex flex-col`}>
-                {/* Result badge */}
-                <div className="result-badge mb-5">
-                  <span className="inline-block text-xs font-bold tracking-wider uppercase">{t.result}</span>
-                </div>
-                <div className="text-4xl font-display font-black text-white/10 mb-4">"</div>
-                <p className="text-gray-300 leading-relaxed mb-6 font-light flex-1">{t.quote}</p>
-                <div className="border-t border-white/10 pt-4">
-                  <div className="font-medium text-white text-sm">{t.author}</div>
-                  <div className="text-gray-500 text-xs mt-1 font-light">{t.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ── */}
-      <section id="contact" className="px-8 md:px-16 py-32 relative overflow-hidden">
-        <div
-          className="absolute inset-[-10%]"
-          data-parallax="-0.1"
-          style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(245,245,240,0.04) 0%, transparent 70%)' }}
-        />
-
-        <div className="max-w-4xl mx-auto text-center relative">
-          <p className="reveal text-xs tracking-[0.3em] uppercase text-white/40 mb-6">— Начнём?</p>
-
-          {/* Urgency badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="inline-block mb-8"
-          >
-            <div className="urgency-badge">
-              <span className="urgency-dot" />
-              Проектов доступно: 3
             </div>
           </motion.div>
+        )}
+      </AnimatePresence>
 
-          <h2 className="reveal delay-100 font-display font-black leading-none mb-4" style={{ fontSize: 'clamp(3rem, 9vw, 7rem)' }}>
-            ГОТОВЫ
+      {/* ── HERO (THE HOOK) ── */}
+      <section className="relative min-h-screen flex flex-col justify-center items-center px-6 md:px-16 overflow-hidden">
+        
+        {/* 3D Background */}
+        <InteractiveHero />
+
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center w-full z-10 pointer-events-none"
+        >
+          <h1 
+            className="font-display font-medium leading-[0.9] tracking-tight uppercase select-none w-full flex flex-col items-center"
+            style={{ filter: "drop-shadow(0 12px 40px rgba(0, 0, 0, 0.95)) drop-shadow(0 2px 10px rgba(0, 0, 0, 0.8))" }}
+          >
+            <span className="block text-[clamp(4rem,15vw,12rem)] text-[var(--color-text)]">ВИДЕТЬ.</span>
+            <span className="block text-[clamp(4rem,15vw,12rem)] text-stroke italic opacity-70">ЧУВСТВОВАТЬ.</span>
+          </h1>
+        </motion.div>
+        
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 2 }}
+          className="absolute bottom-12 text-center"
+        >
+          <span className="text-[10px] tracking-[0.3em] uppercase text-[var(--color-mid)] font-sans">Погружение</span>
+        </motion.div>
+      </section>
+
+      {/* ── MANIFESTO (THE PROBLEM) ── */}
+      <section id="manifesto" className="px-6 md:px-16 py-40 md:py-60 border-t border-[var(--color-border)]">
+        <div className="max-w-[1200px] mx-auto text-center">
+          <p className="reveal text-xs tracking-[0.3em] uppercase text-[var(--color-mid)] mb-12 font-sans font-medium">— Мой подход</p>
+          <h2 className="reveal stagger-1 font-display font-medium leading-[1.2] uppercase text-[var(--color-text)] text-[clamp(2rem,6vw,4.5rem)] mb-16">
+            Ваше видео пропустят.<br/>
+            <span className="text-[var(--color-mid)] italic">Если только я его не смонтирую.</span>
           </h2>
-          <h2 className="reveal delay-200 font-display font-black leading-none mb-10 text-stroke" style={{ fontSize: 'clamp(3rem, 9vw, 7rem)' }}>
-            НАЧАТЬ?
-          </h2>
-          <p className="reveal delay-300 text-gray-400 mb-12 font-light leading-relaxed max-w-md mx-auto">
-            Беру ограниченное числов проектов в месяц, чтобы каждому уделить максимум внимания. Расскажите и о вашем — я отвечу в ближайшее время.
+          <p className="reveal stagger-2 text-[var(--color-mid)] font-light leading-relaxed max-w-3xl mx-auto text-lg md:text-2xl">
+            В эпоху бесконечного скролла внимание стоит дороже золота. Большинство роликов — это визуальный шум. Я не просто склеиваю кадры. Я конструирую визуальные триггеры, которые заставляют зрителя остановиться. Это не просто монтаж — это мой способ управлять вниманием вашей аудитории.
           </p>
-          <div className="reveal delay-400">
+        </div>
+      </section>
+
+      {/* ── THE CRAFT ── */}
+      <section className="relative px-6 md:px-16 py-40 border-y border-[var(--color-border)] overflow-hidden">
+        {/* Crisp Horizontal Vector Waves */}
+        <CraftLines />
+
+        <div className="max-w-[1400px] mx-auto relative z-10">
+          <div className="grid md:grid-cols-3 gap-16 md:gap-24 text-center md:text-left">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h3 className="font-display text-4xl md:text-6xl text-[var(--color-text)] mb-6">РИТМ.</h3>
+              <p className="text-[var(--color-mid)] font-light text-lg">Динамика, которая не отпускает ни на секунду.</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h3 className="font-display text-4xl md:text-6xl text-[var(--color-text)] mb-6">ЦВЕТ.</h3>
+              <p className="text-[var(--color-mid)] font-light text-lg">Кинематографичная атмосфера и сочность каждого кадра.</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <h3 className="font-display text-4xl md:text-6xl text-[var(--color-text)] mb-6">ЗВУК.</h3>
+              <p className="text-[var(--color-mid)] font-light text-lg">Саунд-дизайн, который пробирает до мурашек.</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── SHOWCASE (INTERACTIVE EXHIBITION) ── */}
+      <section id="showcase" className="px-6 md:px-16 py-40 min-h-screen flex flex-col">
+        <div className="max-w-[1800px] mx-auto w-full flex-1 flex flex-col">
+          <p className="text-xs tracking-[0.3em] uppercase text-[var(--color-mid)] mb-12 font-sans font-medium">— Мои работы</p>
+
+          {/* Top Layout: Theme list aligned on the LEFT */}
+          <div className="flex flex-col gap-6 mb-16 max-w-2xl">
+            {categories.map((cat) => {
+              const isActive = activeCategory === cat
+
+              return (
+                <motion.button
+                  key={cat}
+                  onClick={() => setActiveCategory(isActive ? null : cat)}
+                  onMouseEnter={() => setHoveredCategory(cat)}
+                  onMouseLeave={() => setHoveredCategory(null)}
+                  animate={{
+                    scale: isActive ? 1.05 : (hoveredCategory === cat ? 1.02 : 1),
+                    x: isActive ? 15 : (hoveredCategory === cat ? 8 : 0),
+                    color: isActive || hoveredCategory === cat ? 'var(--color-accent)' : 'var(--color-text)',
+                    opacity: activeCategory && !isActive ? 0.35 : 1
+                  }}
+                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className={`text-left font-display uppercase tracking-tight origin-left transition-colors cursor-pointer ${
+                    isActive ? 'text-5xl md:text-7xl font-bold' : 'text-3xl md:text-5xl font-medium'
+                  }`}
+                >
+                  {cat}
+                </motion.button>
+              )
+            })}
+          </div>
+
+          {/* Bottom Layout: Video Grid appearing BELOW the themes */}
+          <AnimatePresence mode="wait">
+            {activeCategory && (
+              <motion.div
+                key={activeCategory}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={{
+                  hidden: { opacity: 0, y: 50 },
+                  visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.15 } },
+                  exit: { opacity: 0, y: 20, transition: { duration: 0.3 } }
+                }}
+                className="border-t border-[var(--color-border)]/40 pt-16"
+              >
+                <div className="flex justify-between items-center mb-10">
+                  <h3 className="font-display text-2xl uppercase tracking-wider text-[var(--color-text)]">
+                    {activeCategory} <span className="text-xs font-sans text-[var(--color-mid)] tracking-widest text-normal">({filteredProjects.length})</span>
+                  </h3>
+                </div>
+
+                <div className={`grid gap-8 ${
+                  activeCategory === 'Reels / Shorts' 
+                    ? 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4' 
+                    : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+                }`}>
+                  {filteredProjects.map((project) => (
+                    <ProjectCard
+                      key={project.title}
+                      project={project}
+                      onSelect={setSelectedProject}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </section>
+
+      {/* ── CTA (IMPACT) ── */}
+      <section id="contact" className="px-6 md:px-16 py-40 md:py-60 relative overflow-hidden border-t border-[var(--color-border)]">
+        <div className="max-w-[1400px] mx-auto text-center">
+          <p className="reveal text-xs tracking-[0.3em] uppercase text-[var(--color-mid)] mb-12 font-sans font-medium">— Финал</p>
+          <h2 className="reveal stagger-1 font-display font-medium leading-[1] mb-20 uppercase text-[var(--color-text)] text-[clamp(3rem,8vw,7rem)]">
+            Ваш проект заслуживает<br/>
+            <span className="italic text-[var(--color-mid)]">быть увиденным.</span>
+          </h2>
+          
+          <div className="reveal stagger-2 flex justify-center">
             <a
               href="https://t.me/hypoxia_editing"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover-invert glow-button border border-white px-16 py-6 font-display font-bold text-sm tracking-widest uppercase transition-all duration-300 animate-pulse-border inline-flex items-center gap-3"
+              className="inline-flex items-center justify-center px-16 py-6 font-sans font-medium text-sm tracking-[0.2em] uppercase transition-all duration-300 rounded-full bg-[var(--color-text)] text-[var(--color-bg)] hover:opacity-90"
             >
-              Написать сейчас
-              <ArrowRight size={18} />
+              Начать работу
             </a>
           </div>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="border-t border-white/10 px-8 md:px-16 py-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-            <div>
-              <div className="font-display font-black text-2xl tracking-tighter mb-2">
-                HYPOXIA
-              </div>
-              <p className="text-gray-600 text-xs font-light">Специалист по монтажу и моушн-дизайну</p>
-            </div>
-            <div className="flex gap-8 text-xs tracking-widest uppercase font-light text-gray-600">
-              <a href="#work" className="hover:text-white transition-colors duration-300">Работы</a>
-              <a href="#services" className="hover:text-white transition-colors duration-300">Услуги</a>
-              <a href="#about" className="hover:text-white transition-colors duration-300">Обо мне</a>
-              <a href="#contact" className="hover:text-white transition-colors duration-300">Контакт</a>
-            </div>
-            <div className="flex gap-6 text-xs tracking-widest uppercase font-light text-gray-600">
-              <a href="https://t.me/hypoxia_editing" target="_blank" rel="noopener noreferrer" className="glow-text hover:text-white transition-colors duration-300">Telegram</a>
-            </div>
-          </div>
-          <div className="section-line my-8" />
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-700 font-light">
-            <span>© 2026 Hypoxia. Все права защищены.</span>
-            <span>Сделано бессоными ночами напролет</span>
-          </div>
+      <footer className="border-t border-[var(--color-border)] px-6 md:px-16 py-12">
+        <div className="max-w-[1800px] mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-sans tracking-[0.2em] uppercase text-[var(--color-mid)]">
+          <span>© 2026 Hypoxia Studio</span>
+          <span>Видеть. Чувствовать.</span>
         </div>
       </footer>
 
-      {/* ── FLOATING CTA (Mobile) ── */}
-      <AnimatePresence>
-        {showFloatingCta && (
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 left-4 right-4 z-[90] md:hidden"
-          >
-            <a
-              href="https://t.me/hypoxia_editing"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="floating-cta"
-            >
-              <MessageCircle size={18} />
-              <span>Написать в Telegram</span>
-              <ArrowRight size={16} />
-            </a>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
+      {/* Modal case study detail */}
       <AnimatePresence>
         {selectedProject && (
           <ProjectDetail

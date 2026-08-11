@@ -27,19 +27,19 @@ export function ServicesSection() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
+        staggerChildren: 0.15,
       },
     },
   }
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 40 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.8,
-        ease: [0.16, 1, 0.3, 1] as any,
+        duration: 1.5,
+        ease: [0.25, 1, 0.5, 1],
       },
     },
   }
@@ -47,65 +47,69 @@ export function ServicesSection() {
   return (
     <section
       id="services"
-      className="px-8 md:px-16 py-24 border-t border-white/10"
+      className="px-6 md:px-16 py-40 border-t border-[var(--color-border)]"
     >
-      <div className="max-w-7xl mx-auto">
-        <motion.p
+      <div className="max-w-[1400px] mx-auto">
+        <motion.p 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-xs tracking-[0.3em] uppercase text-white/40 mb-4"
+          className="text-xs tracking-[0.2em] uppercase text-[var(--color-mid)] mb-8 font-sans font-medium"
         >
           — Что я делаю
         </motion.p>
         <motion.h2
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.1 }}
-          className="font-display font-black leading-none mb-20"
-          style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          className="font-display font-medium leading-none mb-32 uppercase text-[var(--color-ink)] text-[clamp(3rem,7vw,6rem)]"
         >
-          МОИ
+          Мои
           <br />
-          <span className="text-stroke">УСЛУГИ</span>
+          <span className="italic text-[var(--color-mid)]">услуги</span>
         </motion.h2>
 
-        <motion.div
+        {/* Services List - Editorial hairlines */}
+        <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="space-y-0"
+          className="flex flex-col border-t border-[var(--color-border)]"
         >
           {services.map((service, i) => (
             <motion.div
               key={i}
               variants={itemVariants}
-              className="group flex flex-col md:flex-row gap-6 md:gap-12 items-start md:items-center py-10 border-b border-white/10 cursor-pointer"
+              className="group flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-center py-16 border-b border-[var(--color-border)] transition-colors duration-300 hover:bg-[var(--color-surface)] -mx-6 px-6 md:-mx-16 md:px-16"
             >
-              <span className="font-display font-black text-4xl text-stroke opacity-30 group-hover:opacity-100 transition-opacity duration-300 min-w-[4rem]">
+              {/* Number */}
+              <span className="font-sans font-medium text-lg text-[var(--color-mid)] group-hover:text-[var(--color-ink)] transition-colors duration-300 min-w-[3rem]">
                 {service.num}
               </span>
-              <h3 className="font-display font-black text-2xl md:text-3xl tracking-tight group-hover:text-white transition-colors duration-300 min-w-[260px]">
+
+              {/* Title */}
+              <h3 className="font-display font-medium text-2xl md:text-3xl tracking-tight text-[var(--color-ink)] transition-colors duration-300 min-w-[280px] uppercase">
                 {service.title}
               </h3>
-              <p className="text-gray-500 font-light leading-relaxed flex-1 group-hover:text-gray-300 transition-colors duration-300">
+
+              {/* Description */}
+              <p className="text-[var(--color-ink)] opacity-70 font-light leading-relaxed flex-1 transition-colors duration-300 text-base md:text-lg">
                 {service.desc}
               </p>
-              <div className="flex flex-wrap gap-2 min-w-[200px]">
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-3 min-w-[240px]">
                 {service.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-xs border border-white/20 px-3 py-1 font-light tracking-wider group-hover:border-white/50 transition-colors duration-300"
+                    className="text-[10px] tracking-[0.1em] font-sans font-medium border border-[var(--color-border)] px-4 py-2 text-[var(--color-ink)] group-hover:border-[var(--color-ink)] transition-colors duration-300 rounded-full uppercase"
                   >
                     {tag}
                   </span>
                 ))}
               </div>
-              <span className="text-2xl text-white/20 group-hover:text-white group-hover:translate-x-2 transition-all duration-300">
-
-              </span>
             </motion.div>
           ))}
         </motion.div>

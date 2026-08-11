@@ -27,12 +27,12 @@ export function StatCard({ value, suffix, label, delay }: StatCardProps) {
   return (
     <div
       ref={ref}
-      className={`reveal stagger-${delay} card-dark rounded-2xl p-8 flex flex-col items-center justify-center text-center hover-lift`}
+      className={`reveal stagger-${delay} flex flex-col items-center justify-center text-center py-6 px-4`}
     >
-      <div className="font-display text-4xl md:text-6xl font-black text-white mb-2 text-center">
-        {count}{suffix}
+      <div className="font-display font-medium text-[clamp(2.5rem,5vw,4.5rem)] text-[var(--color-ink)] mb-4 text-center leading-none">
+        {count}<span className="text-[var(--color-accent)]">{suffix}</span>
       </div>
-      <div className="text-gray-400 text-sm font-light tracking-widest uppercase text-center">
+      <div className="text-[var(--color-mid)] text-xs font-sans font-medium tracking-[0.15em] uppercase text-center">
         {label}
       </div>
     </div>
